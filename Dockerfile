@@ -4,14 +4,16 @@ FROM python:3.10-slim
 # Set working directory
 WORKDIR /app
 
-# Install Jupyter and dependencies
-RUN pip install --no-cache-dir notebook jupyterlab numpy
+# Copy requirements and install them
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all project files
+# Copy all project files (including notebook)
 COPY . /app
 
-# Expose Jupyter port
+# Expose the Jupyter Lab port
 EXPOSE 8888
 
-# Launch Jupyter Lab with no auth token
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root", "--NotebookApp.token=''"]
+# Start Jupyter Lab with no authentication token
+CMD echo "JupyterLab running at http://localhost:8888" && \
+    jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''
